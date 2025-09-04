@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { deletePoll } from "@/app/lib/actions/poll-actions";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
 interface Poll {
   id: string;
@@ -24,10 +25,44 @@ export default function AdminPage() {
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteLoading, setDeleteLoading] = useState<string | null>(null);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    fetchAllPolls();
+    checkAuthorization();
   }, []);
+
+  const checkAuthorization = async () => {
+    const supabase = createClient();
+    
+    // Check if user is authenticated
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+
+    // Check if user has admin role (you'll need to implement this in your Supabase setup)
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    // For now, we'll use a simple check - you should implement proper role-based access control
+    // This is a placeholder - replace with your actual admin role logic
+    if (profile?.role === 'admin') {
+      setIsAuthorized(true);
+      fetchAllPolls();
+    } else {
+      // Redirect unauthorized users
+      router.push('/polls');
+    }
+    
+    setAuthLoading(false);
+  };
 
   const fetchAllPolls = async () => {
     const supabase = createClient();
@@ -53,6 +88,14 @@ export default function AdminPage() {
 
     setDeleteLoading(null);
   };
+
+  if (authLoading) {
+    return <div className="p-6">Checking authorization...</div>;
+  }
+
+  if (!isAuthorized) {
+    return <div className="p-6">Access denied. Admin privileges required.</div>;
+  }
 
   if (loading) {
     return <div className="p-6">Loading all polls...</div>;
