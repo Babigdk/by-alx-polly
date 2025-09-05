@@ -1,6 +1,24 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+/**
+ * Supabase Middleware Module
+ * 
+ * This module provides functionality for handling authentication in middleware,
+ * allowing for route protection and session management across the application.
+ */
+
+/**
+ * Updates the user session in middleware
+ * 
+ * @param request - The incoming Next.js request
+ * @returns NextResponse with updated cookies or redirect to login
+ * 
+ * This function creates a Supabase client in the middleware context,
+ * checks if the user is authenticated, and redirects unauthenticated users
+ * to the login page for protected routes. It also handles cookie management
+ * for maintaining the user session.
+ */
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,

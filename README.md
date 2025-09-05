@@ -2,6 +2,24 @@
 
 Welcome to ALX Polly, a full-stack polling application built with Next.js, TypeScript, and Supabase. This project serves as a practical learning ground for modern web development concepts, with a special focus on identifying and fixing common security vulnerabilities.
 
+![ALX Polly Logo](./public/globe.svg)
+
+## 📋 Table of Contents
+
+- [About the Application](#about-the-application)
+- [Security Features](#️-security-features-implemented)
+- [Getting Started](#-getting-started)
+  - [Prerequisites](#1-prerequisites)
+  - [Installation](#2-installation)
+  - [Environment Variables](#3-environment-variables)
+  - [Database Setup](#4-database-setup)
+  - [Running the Application](#5-running-the-application)
+- [Usage Examples](#-usage-examples)
+- [Security Testing](#-security-testing)
+- [Security Resources](#-security-resources)
+- [Contributing](#-contributing)
+- [License](#-license)
+
 ## About the Application
 
 ALX Polly allows authenticated users to create, share, and vote on polls. It's a simple yet powerful application that demonstrates key features of modern web development:
@@ -195,6 +213,50 @@ if (poll.user_id !== user.id) {
   }
 }
 ```
+
+---
+
+## 📱 Usage Examples
+
+### Creating a Poll
+
+1. Log in to your account
+2. Navigate to the "Create Poll" page
+3. Enter your poll question
+4. Add at least two options for users to vote on
+5. Click "Create Poll"
+
+```typescript
+// Example of poll creation using the createPoll server action
+const result = await createPoll(formData);
+if (!result.error) {
+  // Poll created successfully
+  router.push('/polls');
+}
+```
+
+### Voting on a Poll
+
+1. Access a poll via its unique URL or QR code
+2. Select your preferred option
+3. Click "Vote"
+4. View the current results
+
+```typescript
+// Example of voting using the submitVote server action
+const result = await submitVote(pollId, selectedOptionIndex);
+if (!result.error) {
+  // Vote recorded successfully
+  setHasVoted(true);
+}
+```
+
+### Sharing a Poll
+
+1. Navigate to one of your created polls
+2. Click the "Share" button
+3. Copy the unique URL or scan the QR code
+4. Share with your audience via your preferred method
 
 ---
 

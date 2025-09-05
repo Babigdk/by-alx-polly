@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * Dashboard Layout Component
+ * 
+ * This client component provides the layout structure for all dashboard pages.
+ * It includes navigation, user authentication checks, and a responsive header
+ * with user profile dropdown. The layout ensures users are authenticated
+ * before accessing dashboard pages.
+ */
+
 import { ReactNode, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,16 +24,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/app/lib/context/auth-context";
 
+/**
+ * Dashboard Layout Component
+ * 
+ * @param children - React nodes to be rendered within the dashboard layout
+ * @returns React component with authenticated dashboard layout
+ */
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, signOut, loading } = useAuth();
   const router = useRouter();
 
+  /**
+   * Authentication check effect
+   * Redirects unauthenticated users to the login page
+   */
   useEffect(() => {
     if (!loading && !user) {
       router.push("/login");
     }
   }, [user, loading, router]);
 
+  /**
+   * Handles user sign out process
+   * Signs out the user and redirects to login page
+   */
   const handleSignOut = async () => {
     await signOut();
     router.push("/login");

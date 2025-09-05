@@ -4,7 +4,27 @@ import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { SecurityUtils, SECURITY_CONFIG } from "@/lib/security";
 
-// CREATE POLL
+/**
+ * Poll Management Actions Module
+ * 
+ * This module contains server actions for managing polls including creation,
+ * retrieval, voting, and deletion. All functions implement security best practices
+ * including input validation, sanitization, authorization checks, and proper error handling.
+ */
+
+/**
+ * Creates a new poll with a question and multiple options
+ * 
+ * @param formData - Form data containing poll information
+ * @param formData.question - The poll question
+ * @param formData.options - Array of poll options for users to vote on
+ * 
+ * @returns Object with error field (null if successful, error message if failed)
+ * 
+ * This function validates and sanitizes all inputs, ensures the user is authenticated,
+ * and creates a new poll in the database. It implements security measures to prevent
+ * XSS attacks and ensure data integrity.
+ */
 export async function createPoll(formData: FormData) {
   const supabase = await createClient();
 
@@ -57,7 +77,14 @@ export async function createPoll(formData: FormData) {
   return { error: null };
 }
 
-// GET USER POLLS
+/**
+ * Retrieves all polls created by the currently authenticated user
+ * 
+ * @returns Object containing an array of polls and error field (null if successful)
+ * 
+ * This function fetches all polls owned by the current user, ordered by creation date.
+ * It requires authentication and returns an empty array if the user is not authenticated.
+ */
 export async function getUserPolls() {
   const supabase = await createClient();
   const {
@@ -75,7 +102,16 @@ export async function getUserPolls() {
   return { polls: data ?? [], error: null };
 }
 
-// GET POLL BY ID
+/**
+ * Retrieves a specific poll by its unique identifier
+ * 
+ * @param id - The unique identifier of the poll to retrieve
+ * 
+ * @returns Object containing the poll data and error field (null if successful)
+ * 
+ * This function validates the poll ID format and retrieves the corresponding poll
+ * from the database. It implements security measures to prevent injection attacks.
+ */
 export async function getPollById(id: string) {
   const supabase = await createClient();
   
@@ -94,7 +130,18 @@ export async function getPollById(id: string) {
   return { poll: data, error: null };
 }
 
-// SUBMIT VOTE
+/**
+ * Records a user's vote for a specific poll option
+ * 
+ * @param pollId - The unique identifier of the poll
+ * @param optionIndex - The index of the selected option
+ * 
+ * @returns Object with error field (null if successful, error message if failed)
+ * 
+ * This function validates inputs, ensures the user is authenticated, and records
+ * their vote in the database. It implements security measures to prevent multiple
+ * voting and ensure data integrity.
+ */
 export async function submitVote(pollId: string, optionIndex: number) {
   const supabase = await createClient();
   

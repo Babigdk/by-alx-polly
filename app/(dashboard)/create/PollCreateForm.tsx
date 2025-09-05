@@ -1,12 +1,30 @@
 "use client";
 
+/**
+ * Poll Creation Form Component
+ * 
+ * This client component provides a form for creating new polls with a question
+ * and multiple options. It includes client-side validation, dynamic option management,
+ * and security measures to prevent malicious input.
+ */
+
 import { useState } from "react";
 import { createPoll } from "@/app/lib/actions/poll-actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-// Client-side validation helpers
+/**
+ * Client-side validation helpers
+ * These functions validate user inputs before form submission to provide
+ * immediate feedback and prevent security vulnerabilities.
+ */
+
+/**
+ * Validates poll question format and content
+ * @param question - The poll question to validate
+ * @returns Error message if invalid, null if valid
+ */
 function validateQuestion(question: string): string | null {
   if (!question.trim()) return "Question is required";
   if (question.trim().length < 3) return "Question must be at least 3 characters long";
@@ -29,6 +47,11 @@ function validateQuestion(question: string): string | null {
   return null;
 }
 
+/**
+ * Validates poll option format and content
+ * @param option - The poll option to validate
+ * @returns Error message if invalid, null if valid
+ */
 function validateOption(option: string): string | null {
   if (!option.trim()) return "Option cannot be empty";
   if (option.trim().length > 200) return "Option must be less than 200 characters";
@@ -50,6 +73,11 @@ function validateOption(option: string): string | null {
   return null;
 }
 
+/**
+ * Poll Creation Form Component
+ * Renders a form for creating new polls with dynamic option management
+ * @returns React component with poll creation form
+ */
 export default function PollCreateForm() {
   const [options, setOptions] = useState(["", ""]);
   const [question, setQuestion] = useState("");
@@ -57,6 +85,10 @@ export default function PollCreateForm() {
   const [success, setSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  /**
+   * Handles question field changes and clears related errors
+   * @param value - The new question value
+   */
   const handleQuestionChange = (value: string) => {
     setQuestion(value);
     // Clear error when user starts typing
@@ -65,6 +97,11 @@ export default function PollCreateForm() {
     }
   };
 
+  /**
+   * Handles option field changes and clears related errors
+   * @param idx - The index of the option being changed
+   * @param value - The new option value
+   */
   const handleOptionChange = (idx: number, value: string) => {
     setOptions((opts) => opts.map((opt, i) => (i === idx ? value : opt)));
     // Clear error when user starts typing
@@ -76,8 +113,17 @@ export default function PollCreateForm() {
     }
   };
 
+  /**
+   * Adds a new empty option to the options list
+   */
   const addOption = () => setOptions((opts) => [...opts, ""]);
   
+  /**
+   * Removes an option from the options list
+   * @param idx - The index of the option to remove
+   * 
+   * Maintains at least two options as required for a valid poll
+   */
   const removeOption = (idx: number) => {
     if (options.length > 2) {
       setOptions((opts) => opts.filter((_, i) => i !== idx));
@@ -91,6 +137,13 @@ export default function PollCreateForm() {
     }
   };
 
+  /**
+   * Validates the entire form before submission
+   * @returns Boolean indicating if the form is valid
+   * 
+   * Performs comprehensive validation on the question and all options,
+   * updating the errors state with any validation failures
+   */
   const validateForm = (): boolean => {
     const newErrors: { question?: string; options?: string[] } = {};
     
@@ -124,6 +177,13 @@ export default function PollCreateForm() {
     return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Handles form submission
+   * @param event - The form submission event
+   * 
+   * Validates the form, prepares form data, submits to server action,
+   * and handles success/error states including redirection on success
+   */
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
@@ -219,4 +279,4 @@ export default function PollCreateForm() {
       </Button>
     </form>
   );
-} 
+}

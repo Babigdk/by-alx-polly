@@ -1,8 +1,21 @@
+/**
+ * User Polls Page Component
+ * 
+ * This server component displays all polls created by the authenticated user.
+ * It fetches polls using the getUserPolls server action and displays them in a grid layout.
+ * If no polls exist, it shows a message encouraging the user to create their first poll.
+ */
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { getUserPolls } from '@/app/lib/actions/poll-actions';
 import PollActions from './PollActions'; 
 
+/**
+ * User Polls Page Component
+ * 
+ * @returns React server component that displays the user's polls
+ */
 export default async function PollsPage() {
   const { polls, error } = await getUserPolls();
 

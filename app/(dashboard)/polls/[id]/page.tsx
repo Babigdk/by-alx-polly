@@ -1,11 +1,24 @@
 'use client';
 
+/**
+ * Poll Detail Page Component
+ * 
+ * This client component displays a single poll with its details and voting interface.
+ * It allows users to view poll information, cast votes, and see results after voting.
+ * The page also provides options to edit or delete the poll for authorized users.
+ */
+
 import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Mock data for a single poll
+/**
+ * Mock data for a single poll
+ * 
+ * This is temporary mock data used for development and testing.
+ * In production, this would be replaced with data fetched from the database.
+ */
 const mockPoll = {
   id: '1',
   title: 'Favorite Programming Language',
@@ -22,6 +35,12 @@ const mockPoll = {
   createdBy: 'John Doe',
 };
 
+/**
+ * Poll Detail Page Component
+ * 
+ * @param params - Object containing route parameters, including poll ID
+ * @returns React component with poll details and voting interface
+ */
 export default function PollDetailPage({ params }: { params: { id: string } }) {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [hasVoted, setHasVoted] = useState(false);
@@ -31,6 +50,13 @@ export default function PollDetailPage({ params }: { params: { id: string } }) {
   const poll = mockPoll;
   const totalVotes = poll.options.reduce((sum, option) => sum + option.votes, 0);
 
+  /**
+   * Handles the vote submission process
+   * 
+   * Validates that an option is selected, shows submission state,
+   * and simulates an API call to record the vote.
+   * In production, this would call the submitVote server action.
+   */
   const handleVote = () => {
     if (!selectedOption) return;
     
@@ -43,6 +69,12 @@ export default function PollDetailPage({ params }: { params: { id: string } }) {
     }, 1000);
   };
 
+  /**
+   * Calculates the percentage of votes for a given option
+   * 
+   * @param votes - Number of votes for an option
+   * @returns Percentage of total votes (rounded to nearest integer)
+   */
   const getPercentage = (votes: number) => {
     if (totalVotes === 0) return 0;
     return Math.round((votes / totalVotes) * 100);

@@ -1,10 +1,21 @@
 "use client";
 
+/**
+ * Poll Actions Component
+ * 
+ * This client component displays a single poll card with actions (view, edit, delete).
+ * It handles poll deletion confirmation and provides navigation to poll details and edit pages.
+ * Only the poll owner can see and use the edit and delete actions.
+ */
+
 import Link from "next/link";
 import { useAuth } from "@/app/lib/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { deletePoll } from "@/app/lib/actions/poll-actions";
 
+/**
+ * Poll interface defining the structure of poll data
+ */
 interface Poll {
   id: string;
   question: string;
@@ -12,12 +23,26 @@ interface Poll {
   user_id: string;
 }
 
+/**
+ * Props interface for the PollActions component
+ */
 interface PollActionsProps {
   poll: Poll;
 }
 
+/**
+ * Poll Actions Component
+ * 
+ * @param props - Component props containing the poll data
+ * @returns React component with poll card and action buttons
+ */
 export default function PollActions({ poll }: PollActionsProps) {
   const { user } = useAuth();
+  /**
+   * Handles poll deletion with confirmation
+   * Prompts user for confirmation before deleting the poll
+   * and refreshes the page after successful deletion
+   */
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this poll?")) {
       await deletePoll(poll.id);

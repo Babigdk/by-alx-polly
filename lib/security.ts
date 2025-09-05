@@ -1,4 +1,17 @@
-// Security configuration and constants
+/**
+ * Security Module
+ * 
+ * This module provides security utilities, configurations, and constants used throughout
+ * the application to ensure data integrity, prevent common web vulnerabilities, and
+ * implement security best practices.
+ */
+
+/**
+ * Security configuration constants
+ * 
+ * Contains settings for rate limiting, input validation, password requirements,
+ * Content Security Policy (CSP), and security headers.
+ */
 export const SECURITY_CONFIG = {
   // Rate limiting
   RATE_LIMIT: {
@@ -52,7 +65,12 @@ export const SECURITY_CONFIG = {
   },
 } as const;
 
-// Dangerous content patterns for XSS prevention
+/**
+ * Dangerous content patterns for XSS prevention
+ * 
+ * Regular expressions that match potentially malicious content patterns
+ * used to sanitize user inputs and prevent Cross-Site Scripting (XSS) attacks.
+ */
 export const DANGEROUS_PATTERNS = [
   /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
   /<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi,
@@ -64,7 +82,12 @@ export const DANGEROUS_PATTERNS = [
   /data:/gi,
 ] as const;
 
-// Security utility functions
+/**
+ * Security utility class
+ * 
+ * Provides methods for input sanitization, validation, and security checks
+ * used throughout the application to prevent common web vulnerabilities.
+ */
 export class SecurityUtils {
   /**
    * Sanitize input to prevent XSS attacks

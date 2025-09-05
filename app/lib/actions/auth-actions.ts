@@ -4,6 +4,27 @@ import { createClient } from '@/lib/supabase/server';
 import { LoginFormData, RegisterFormData } from '../types';
 import { SecurityUtils, SECURITY_CONFIG } from '@/lib/security';
 
+/**
+ * Authentication Actions Module
+ * 
+ * This module contains server actions for handling user authentication flows including
+ * login, registration, and logout. All functions implement security best practices
+ * including input validation, sanitization, and proper error handling.
+ */
+
+/**
+ * Authenticates a user with their email and password
+ * 
+ * @param data - Object containing user login credentials
+ * @param data.email - User's email address
+ * @param data.password - User's password
+ * 
+ * @returns Object with error field (null if successful, error message if failed)
+ * 
+ * This function validates and sanitizes inputs, checks for proper email format,
+ * and attempts to authenticate the user with Supabase. It implements security
+ * measures to prevent common attacks like XSS and injection.
+ */
 export async function login(data: LoginFormData) {
   const supabase = await createClient();
 
@@ -43,6 +64,20 @@ export async function login(data: LoginFormData) {
   return { error: null };
 }
 
+/**
+ * Registers a new user account
+ * 
+ * @param data - Object containing user registration information
+ * @param data.name - User's display name
+ * @param data.email - User's email address
+ * @param data.password - User's chosen password
+ * 
+ * @returns Object with error field (null if successful, error message if failed)
+ * 
+ * This function validates and sanitizes all inputs, enforces password strength
+ * requirements, and creates a new user account in Supabase. It implements
+ * security measures to prevent common attacks and ensure data integrity.
+ */
 export async function register(data: RegisterFormData) {
   const supabase = await createClient();
 
@@ -93,6 +128,14 @@ export async function register(data: RegisterFormData) {
   return { error: null };
 }
 
+/**
+ * Logs out the currently authenticated user
+ * 
+ * @returns Object with error field (null if successful, error message if failed)
+ * 
+ * This function terminates the user's session in Supabase and clears authentication
+ * state. It should be called when a user explicitly requests to log out.
+ */
 export async function logout() {
   const supabase = await createClient();
   const { error } = await supabase.auth.signOut();
